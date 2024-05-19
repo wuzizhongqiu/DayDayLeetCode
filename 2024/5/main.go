@@ -20,3 +20,17 @@ func maxDivScore(nums []int, divisors []int) int {
 	}
 	return minV
 }
+
+// 2024_5_19 找出数组游戏的赢家（模拟）
+func getWinner(arr []int, k int) int {
+	mx := arr[0]
+	win := 0
+	for i := 1; i < len(arr) && win < k; i++ {
+		if mx < arr[i] {
+			mx = arr[i]
+			win = 0
+		}
+		win++
+	}
+	return mx
+}

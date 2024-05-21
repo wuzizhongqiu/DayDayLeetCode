@@ -34,3 +34,8 @@ func getWinner(arr []int, k int) int {
 	}
 	return mx
 }
+
+// 2024_5_21 找出最大的可达成数字（阅读理解）
+func theMaximumAchievableX(num int, t int) int {
+	return num + t*2
+}

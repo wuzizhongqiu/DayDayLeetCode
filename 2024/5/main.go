@@ -39,3 +39,26 @@ func getWinner(arr []int, k int) int {
 func theMaximumAchievableX(num int, t int) int {
 	return num + t*2
 }
+
+// 2024_5_22 找出输掉零场或一场比赛的玩家（哈希，排序）
+func findWinners(matches [][]int) [][]int {
+	mpWin := map[int]int{}
+	for _, v := range matches {
+		if mpWin[v[0]] == 0 {
+			mpWin[v[0]] = 0
+		}
+		mpWin[v[1]]++
+	}
+	ans := make([][]int, 2)
+	for k, v := range mpWin {
+		if v == 0 {
+			ans[0] = append(ans[0], k)
+		}
+		if v == 1 {
+			ans[1] = append(ans[1], k)
+		}
+	}
+	sort.Ints(ans[0])
+	sort.Ints(ans[1])
+	return ans
+}

@@ -62,3 +62,24 @@ func findWinners(matches [][]int) [][]int {
 	sort.Ints(ans[1])
 	return ans
 }
+
+// 2024_5_23 找出最长等值子数组（哈希，滑窗）
+func longestEqualSubarray(nums []int, k int) int {
+	pos := make([][]int, len(nums)+1)
+	for i, v := range nums {
+		pos[v] = append(pos[v], i)
+	}
+	ans := 1
+	for _, ps := range pos {
+		l, r, n := 0, 0, len(ps)
+		for r < n {
+			// 下标距离 - 正常距离 = 非该值的数的个数（空隙的大小）
+			for ps[r]-ps[l]-(r-l) > k {
+				l++
+			}
+			ans = max(ans, r-l+1)
+			r++
+		}
+	}
+	return ans
+}

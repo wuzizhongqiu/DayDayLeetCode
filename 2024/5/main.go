@@ -83,3 +83,19 @@ func longestEqualSubarray(nums []int, k int) int {
 	}
 	return ans
 }
+
+// 2024_5_24 找出最具竞争力的子序列（栈，模拟，贪心）
+func mostCompetitive(nums []int, k int) []int {
+	st := []int{}
+	for i, v := range nums {
+		// 保证下一个子序列数 <= 当前子序列数（否则就有更优解，出栈）
+		// 保证 nums 剩下的数足够 k 个
+		for len(st) > 0 && st[len(st)-1] > v && len(nums)-i > k-len(st) {
+			st = st[:len(st)-1]
+		}
+		if len(st) < k {
+			st = append(st, v)
+		}
+	}
+	return st
+}

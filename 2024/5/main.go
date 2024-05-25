@@ -99,3 +99,22 @@ func mostCompetitive(nums []int, k int) []int {
 	}
 	return st
 }
+
+// 2024_5_25 找出满足差值条件的下标 I（模拟）
+func findIndices(nums []int, indexDifference int, valueDifference int) []int {
+	for i, v := range nums {
+		for j, d := range nums {
+			if abs(i-j) >= indexDifference && abs(v-d) >= valueDifference {
+				return []int{i, j}
+			}
+		}
+	}
+	return []int{-1, -1}
+}
+
+func abs(a int) int {
+	if a > 0 {
+		return a
+	}
+	return -a
+}

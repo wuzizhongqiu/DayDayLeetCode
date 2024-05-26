@@ -118,3 +118,19 @@ func abs(a int) int {
 	}
 	return -a
 }
+
+// 2024_5_26 找出第 K 大的异或坐标值（前缀异或和）
+func kthLargestValue(matrix [][]int, k int) int {
+	a := []int{}
+	colSum := make([]int, len(matrix[0]))
+	for _, row := range matrix {
+		sum := 0
+		for j, s := range row {
+			colSum[j] ^= s
+			sum ^= colSum[j]
+			a = append(a, sum)
+		}
+	}
+	sort.Ints(a)
+	return a[len(a)-k]
+}

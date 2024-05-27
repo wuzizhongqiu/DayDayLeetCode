@@ -134,3 +134,25 @@ func kthLargestValue(matrix [][]int, k int) int {
 	sort.Ints(a)
 	return a[len(a)-k]
 }
+
+// 2024_5_27 找出缺失的观测数据（模拟、数学）
+func missingRolls(rolls []int, mean int, n int) []int {
+	sumN := (len(rolls) + n) * mean
+	for _, v := range rolls {
+		sumN -= v
+	}
+	if sumN < n || sumN > n*6 {
+		return nil
+	}
+	avg, need := sumN/n, sumN%n
+	ans := []int{}
+	for i := 0; i < n; i++ {
+		if need > 0 {
+			ans = append(ans, avg+1)
+			need--
+		} else {
+			ans = append(ans, avg)
+		}
+	}
+	return ans
+}

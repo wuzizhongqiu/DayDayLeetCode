@@ -1,6 +1,9 @@
 package main
 
-import "sort"
+import (
+	"slices"
+	"sort"
+)
 
 // 2024_5_18 找出可整除性得分最大的整数（排序、暴力）
 func maxDivScore(nums []int, divisors []int) int {
@@ -163,6 +166,35 @@ func findPeaks(mountain []int) []int {
 		if mountain[i] > mountain[i-1] && mountain[i] > mountain[i+1] {
 			ans = append(ans, i)
 		}
+	}
+	return ans
+}
+
+// 找出出现至少三次的最长特殊子字符串 I（模拟）
+func maximumLength(s string) int {
+	chs := [26][]int{}
+	cnt := 0
+	for i := range s {
+		cnt++
+		if i+1 == len(s) || s[i] != s[i+1] {
+			chs[s[i]-'a'] = append(chs[s[i]-'a'], cnt)
+			cnt = 0
+		}
+	}
+
+	ans := 0
+	for _, v := range chs {
+		if len(v) == 0 {
+			continue
+		}
+		slices.SortFunc(v, func(a, b int) int {
+			return b - a
+		})
+		v = append(v, 0, 0)
+		ans = max(ans, v[0]-2, min(v[0]-1, v[1]), v[2])
+	}
+	if ans == 0 {
+		return -1
 	}
 	return ans
 }

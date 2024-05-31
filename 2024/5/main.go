@@ -198,3 +198,25 @@ func maximumLength(s string) int {
 	}
 	return ans
 }
+
+// 2024_5_31 找出缺失和重复的数字（模拟、哈希）
+func findMissingAndRepeatedValues(grid [][]int) []int {
+	n := len(grid)
+	cnt := make([]int, n*n+1)
+	cnt[0] = 1
+	for _, v := range grid {
+		for _, v1 := range v {
+			cnt[v1]++
+		}
+	}
+	ans := make([]int, 2)
+	for i, v := range cnt {
+		if v == 0 {
+			ans[1] = i
+		}
+		if v == 2 {
+			ans[0] = i
+		}
+	}
+	return ans
+}

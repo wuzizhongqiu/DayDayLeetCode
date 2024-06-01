@@ -220,3 +220,20 @@ func findMissingAndRepeatedValues(grid [][]int) []int {
 	}
 	return ans
 }
+
+// 2024_6_1 给小朋友们分糖果 I
+func distributeCandies(n int, limit int) (ans int) {
+	// 一刻都没有为被蓝桥杯爆杀而哀悼
+	// 我将立刻返回我忠实的 LeetCode 每日一题
+	for i := 0; i <= limit; i++ {
+		for j := 0; j <= limit; j++ {
+			if i+j > n {
+				break
+			}
+			if n-i-j <= limit {
+				ans++
+			}
+		}
+	}
+	return ans
+}

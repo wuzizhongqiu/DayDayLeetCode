@@ -237,3 +237,12 @@ func distributeCandies(n int, limit int) (ans int) {
 	}
 	return ans
 }
+
+// 2024_6_2 分糖果（模拟、计数）
+func distributeCandies2(candyType []int) int {
+	mp := map[int]int{}
+	for _, v := range candyType {
+		mp[v]++
+	}
+	return min(len(candyType)/2, len(mp))
+}

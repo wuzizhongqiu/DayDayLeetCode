@@ -246,3 +246,22 @@ func distributeCandies2(candyType []int) int {
 	}
 	return min(len(candyType)/2, len(mp))
 }
+
+// 2024_6_3 分糖果 II（模拟）
+func distributeCandies3(candies int, num_people int) []int {
+	ans := make([]int, num_people)
+	num, idex := 1, 0
+	for candies > 0 {
+		i := idex % (num_people)
+		if candies > num {
+			ans[i] += num
+			candies -= num
+			num++
+		} else {
+			ans[i] += candies
+			break
+		}
+		idex++
+	}
+	return ans
+}

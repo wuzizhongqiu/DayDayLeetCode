@@ -1,5 +1,7 @@
 package main
 
+import "slices"
+
 // 2024_6_1 给小朋友们分糖果 I
 func distributeCandies(n int, limit int) (ans int) {
 	// 一刻都没有为被蓝桥杯爆杀而哀悼
@@ -79,4 +81,67 @@ func countPairsOfConnectableServers(edges [][]int, signalSpeed int) []int {
 		}
 	}
 	return ans
+}
+
+// 2024_6_4 将元素分配到两个数组中 II（二分、离散化、树状数组）
+
+// 树状数组
+type fenwick []int
+
+// 维护 [1, i] 的元素个数
+func (f fenwick) add(i int) {
+	for ; i < len(f); i += i & -i {
+		f[i]++
+	}
+}
+
+// 获取 [1, i] 的元素个数和
+func (f fenwick) pre(i int) (res int) {
+	for ; i > 0; i &= i - 1 {
+		res += f[i]
+	}
+	return res
+}
+
+func resultArray(nums []int) []int {
+	// 排序去重 -> 离散化
+	sorted := slices.Clone(nums)
+	slices.Sort(sorted)
+	sorted = slices.Compact(sorted)
+	m := len(sorted)
+	a, b := []int{nums[0]}, []int{nums[1]}
+	// 维护树状数组
+	t1, t2 := make(fenwick, m+1), make(fenwick, m+1)
+	for i, v := range sorted {
+		if v == nums[0] {
+			t1.add(i + 1)
+		}
+		if v == nums[1] {
+			t2.add(i + 1)
+		}
+	}
+	for _, x := range nums[2:] {
+		// 二分查找离散化数组的下标位置
+		l, r := 0, len(sorted)
+		for l < r {
+			mid := (l + r) >> 1
+			if sorted[mid] < x {
+				l = mid + 1
+			} else {
+				r = mid
+			}
+		}
+		v := l + 1
+		// greaterCount: 用数组所有元素 - 小于等于 val 元素的数量 = 大于 val 元素的数量
+		gc1 := len(a) - t1.pre(v)
+		gc2 := len(b) - t2.pre(v)
+		if gc1 > gc2 || gc1 == gc2 && len(a) <= len(b) {
+			a = append(a, x)
+			t1.add(v)
+		} else {
+			b = append(b, x)
+			t2.add(v)
+		}
+	}
+	return append(a, b...)
 }

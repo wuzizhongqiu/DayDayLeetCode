@@ -145,3 +145,16 @@ func resultArray(nums []int) []int {
 	}
 	return append(a, b...)
 }
+
+// 2024_6_6 区分黑球与白球（模拟）
+func minimumSteps(s string) (ans int64) {
+	cnt := int64(0)
+	for _, v := range s {
+		if v == '1' {
+			cnt++
+		} else {
+			ans += cnt
+		}
+	}
+	return ans
+}

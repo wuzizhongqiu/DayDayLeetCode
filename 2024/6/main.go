@@ -158,3 +158,13 @@ func minimumSteps(s string) (ans int64) {
 	}
 	return ans
 }
+
+// 2024_6_7 相同分数的最大操作数目 I（模拟）
+func maxOperations(nums []int) int {
+	ans := 1
+	sum := nums[0] + nums[1]
+	for i := 3; i < len(nums) && nums[i-1]+nums[i] == sum; i += 2 {
+		ans++
+	}
+	return ans
+}

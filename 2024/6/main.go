@@ -168,3 +168,61 @@ func maxOperations(nums []int) int {
 	}
 	return ans
 }
+
+// 2024_6_8 相同分数的最大操作数目 II
+func maxOperations2(nums []int) int {
+	n := len(nums)
+	// 选择 nums 中最前面两个元素并且删除它们
+	res1, finish := add(nums[2:], nums[0]+nums[1])
+	if finish == true {
+		return n / 2
+	}
+	// 选择 nums 中最后两个元素并且删除它们
+	res2, finish := add(nums[:n-2], nums[n-1]+nums[n-2])
+	if finish == true {
+		return n / 2
+	}
+	// 选择 nums 中第一个和最后一个元素并且删除它们
+	res3, finish := add(nums[1:n-1], nums[0]+nums[n-1])
+	if finish == true {
+		return n / 2
+	}
+	return max(res1, res2, res3) + 1
+}
+
+func add(a []int, target int) (res int, finish bool) {
+	n := len(a)
+	memo := make([][]int, n)
+	for i := range memo {
+		memo[i] = make([]int, n)
+		for j := range memo {
+			memo[i][j] = -1
+		}
+	}
+	var dfs func(int, int) int
+	dfs = func(i, j int) (res int) {
+		if finish == true {
+			return res
+		}
+		if i >= j {
+			finish = true
+			return res
+		}
+		if memo[i][j] != -1 {
+			return memo[i][j]
+		}
+		if a[i]+a[i+1] == target {
+			res = max(res, dfs(i+2, j)+1)
+		}
+		if a[j]+a[j-1] == target {
+			res = max(res, dfs(i, j-2)+1)
+		}
+		if a[i]+a[j] == target {
+			res = max(res, dfs(i+1, j-1)+1)
+		}
+		memo[i][j] = res
+		return res
+	}
+	res = dfs(0, n-1)
+	return res, finish
+}

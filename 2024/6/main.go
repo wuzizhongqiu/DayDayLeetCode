@@ -1,6 +1,9 @@
 package main
 
-import "slices"
+import (
+	"slices"
+	"sort"
+)
 
 // 2024_6_1 给小朋友们分糖果 I
 func distributeCandies(n int, limit int) (ans int) {
@@ -225,4 +228,77 @@ func add(a []int, target int) (res int, finish bool) {
 	}
 	res = dfs(0, n-1)
 	return res, finish
+}
+
+// 2024_6_9 戳气球（记忆化搜索）
+func maxCoins(nums []int) int {
+	n := len(nums)
+	val, memo := map[int]int{}, make([][]int, n)
+	for i := range memo {
+		memo[i] = make([]int, n)
+		for j := range memo {
+			memo[i][j] = -1
+		}
+	}
+	for i, v := range nums {
+		val[i] = v
+	}
+	val[-1], val[n] = 1, 1
+	var dfs func(int, int) int
+	dfs = func(i, j int) (ans int) {
+		if i > j {
+			return ans
+		}
+		if memo[i][j] != -1 {
+			return memo[i][j]
+		}
+		for k := i; k <= j; k++ {
+			ans = max(ans, nums[k]*val[i-1]*val[j+1]+dfs(i, k-1)+dfs(k+1, j))
+		}
+		memo[i][j] = ans
+		return ans
+	}
+	return dfs(0, n-1)
+}
+
+// 2024_6_10 救生艇（贪心/二分）
+func numRescueBoats(people []int, limit int) (ans int) {
+	sort.Ints(people)
+	for i, v := range people {
+		empty := limit - v
+		if empty >= v {
+			// 试试二分
+			l, r := i+1, len(people)-1
+			for l < r {
+				mid := (l + r + 1) >> 1
+				if people[mid] > empty {
+					r = mid - 1
+				} else {
+					l = mid
+				}
+			}
+			if people[l] <= empty {
+				people[l] = limit + 1
+			}
+		}
+		if v > limit {
+			continue
+		}
+		ans++
+	}
+	return ans
+}
+
+// 2024_6_11 甲板上的战舰（模拟）
+func countBattleships(board [][]byte) (ans int) {
+	for i := range board {
+		for j := range board[i] {
+			if (board[i][j] == 'X') &&
+				(i == 0 || board[i-1][j] != 'X') &&
+				(j == 0 || board[i][j-1] != 'X') {
+				ans++
+			}
+		}
+	}
+	return ans
 }

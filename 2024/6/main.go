@@ -302,3 +302,29 @@ func countBattleships(board [][]byte) (ans int) {
 	}
 	return ans
 }
+
+// 2024_6_13 子序列最大优雅度（排序、贪心）
+func findMaximumElegance(items [][]int, k int) int64 {
+	slices.SortFunc(items, func(a, b []int) int {
+		return b[0] - a[0]
+	})
+	ans, totalProfit := 0, 0
+	vis, duplicate := map[int]bool{}, []int{} // 重复类的判断与利润
+	for i, p := range items {
+		profit, category := p[0], p[1]
+		if i < k {
+			totalProfit += profit
+			if vis[category] == false {
+				vis[category] = true
+			} else { // 这个是重复的类别
+				duplicate = append(duplicate, profit)
+			}
+		} else if len(duplicate) > 0 && vis[category] == false { // 不是重复类别
+			vis[category] = true
+			totalProfit += profit - duplicate[len(duplicate)-1] // 替换利润最低的重复类别
+			duplicate = duplicate[:len(duplicate)-1]
+		}
+		ans = max(ans, totalProfit+len(vis)*len(vis))
+	}
+	return int64(ans)
+}

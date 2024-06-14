@@ -328,3 +328,32 @@ func findMaximumElegance(items [][]int, k int) int64 {
 	}
 	return int64(ans)
 }
+
+// 2024_6_14 访问数组中的位置使分数最大（记忆化搜索/DP）
+func maxScore(nums []int, x int) int64 {
+	n := len(nums)
+	memo := make([][2]int, n)
+	for i := range memo {
+		memo[i] = [2]int{-1, -1}
+	}
+	var dfs func(int, int) int
+	dfs = func(i, j int) (res int) {
+		if i == n {
+			return res
+		}
+		p := &memo[i][j]
+		if *p != -1 {
+			return *p
+		}
+		defer func() {
+			*p = res
+		}()
+		// 下一个选择奇偶性相同的序列数
+		if nums[i]%2 != j {
+			return dfs(i+1, j)
+		}
+		// 下一个选择奇偶性不同的序列数（不选可能结果更大）
+		return max(dfs(i+1, j), dfs(i+1, j^1)-x) + nums[i]
+	}
+	return int64(dfs(0, nums[0]%2))
+}

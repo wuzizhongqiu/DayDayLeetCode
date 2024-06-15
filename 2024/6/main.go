@@ -357,3 +357,16 @@ func maxScore(nums []int, x int) int64 {
 	}
 	return int64(dfs(0, nums[0]%2))
 }
+
+// 2024_6_15 数组的最大美丽值（排序、滑动窗口）
+func maximumBeauty(nums []int, k int) (ans int) {
+	sort.Ints(nums)
+	l := 0
+	for r, v := range nums {
+		for v-nums[l] > k*2 {
+			l++
+		}
+		ans = max(ans, r-l+1)
+	}
+	return ans
+}

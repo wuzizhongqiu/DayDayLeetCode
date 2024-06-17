@@ -370,3 +370,35 @@ func maximumBeauty(nums []int, k int) (ans int) {
 	}
 	return ans
 }
+
+// 2024_6_17 最长特殊序列 II（排序，暴力匹配）
+func findLUSlength(strs []string) int {
+	// 降序排序
+	slices.SortFunc(strs, func(s1, s2 string) int {
+		return len(s2) - len(s1)
+	})
+next:
+	for i, v1 := range strs {
+		for j, v2 := range strs {
+			if i != j && isSub(v1, v2) {
+				continue next
+			}
+		}
+		return len(v1)
+	}
+	return -1
+}
+
+// 判断 v1 是否是 v2 的子序列
+func isSub(v1, v2 string) bool {
+	i := 0
+	for _, v := range v2 {
+		if v1[i] == byte(v) {
+			i++
+		}
+		if i == len(v1) {
+			return true
+		}
+	}
+	return false
+}

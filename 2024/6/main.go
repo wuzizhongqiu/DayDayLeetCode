@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"slices"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 // 2024_6_1 给小朋友们分糖果 I
@@ -401,4 +404,18 @@ func isSub(v1, v2 string) bool {
 		}
 	}
 	return false
+}
+
+// 2024_6_18 价格减免（字符串）
+func discountPrices(sentence string, discount int) string {
+	a := strings.Split(sentence, " ")
+	for i, v := range a {
+		if len(v) > 1 && v[0] == '$' {
+			price, err := strconv.Atoi(v[1:])
+			if err == nil {
+				a[i] = fmt.Sprintf("$%.2f", float64(price)*(1-float64(discount)/100))
+			}
+		}
+	}
+	return strings.Join(a, " ")
 }

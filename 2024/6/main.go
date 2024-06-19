@@ -419,3 +419,38 @@ func discountPrices(sentence string, discount int) string {
 	}
 	return strings.Join(a, " ")
 }
+
+// 2024_6_19 矩阵中严格递增的单元格数（排序，动态规划）
+func maxIncreasingCells(mat [][]int) int {
+	type pair struct{ x, y int } // 存下标
+	g := map[int][]pair{}
+	for i, v := range mat {
+		for j, v2 := range v {
+			// 把大小相同的元素的坐标存在一起
+			g[v2] = append(g[v2], pair{i, j})
+		}
+	}
+	keys := []int{}
+	for k := range g {
+		// 把元素值存入 keys
+		keys = append(keys, k)
+	}
+	sort.Ints(keys) // 根据大小排序
+
+	rowMax := make([]int, len(mat))    // 假设下标为 i, 则对应第 i 行的最大值
+	colMax := make([]int, len(mat[0])) // 假设下标为 i, 则对应第 i 列的最大值
+	for _, v := range keys {
+		pos := g[v] // 这样就能取到对应元素的坐标列表了
+		mx := make([]int, len(pos))
+		for i, p := range pos {
+			// 求出当前坐标对应的最大值
+			mx[i] = max(rowMax[p.x], colMax[p.y]) + 1
+		}
+		for i, p := range pos {
+			// 根据对应坐标最大值，求出每行每列对应的最大值
+			rowMax[p.x] = max(rowMax[p.x], mx[i])
+			colMax[p.y] = max(colMax[p.y], mx[i])
+		}
+	}
+	return slices.Max(rowMax)
+}

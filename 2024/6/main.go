@@ -454,3 +454,28 @@ func maxIncreasingCells(mat [][]int) int {
 	}
 	return slices.Max(rowMax)
 }
+
+// 2024_6_20 美丽下标对的数目（模拟）
+func countBeautifulPairs(nums []int) (ans int) {
+	cnt := [10]int{}
+	for _, v := range nums {
+		for n := 1; n < 10; n++ {
+			// 第一轮 cnt[n] 都小于 0, j 就能走过第一轮, 达成题目 i > j 的结果
+			if cnt[n] > 0 && gcd(v%10, n) == 1 {
+				ans += cnt[n]
+			}
+		}
+		for v >= 10 {
+			v /= 10
+		}
+		cnt[v]++
+	}
+	return ans
+}
+
+func gcd(a, b int) int {
+	for b != 0 {
+		a, b = b, a%b
+	}
+	return a
+}

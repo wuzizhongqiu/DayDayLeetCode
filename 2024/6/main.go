@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cmp"
 	"fmt"
 	"slices"
 	"sort"
@@ -478,4 +479,22 @@ func gcd(a, b int) int {
 		a, b = b, a%b
 	}
 	return a
+}
+
+// 2024_6_21 LCP 气温变化趋势（模拟）
+func temperatureTrend(a []int, b []int) (ans int) {
+	cnt := 0
+	for i := 1; i < len(a); i++ {
+		// func Compare[T Ordered](x, y T) int
+		// -1 if x is less than y,
+		// 0 if x equals y,
+		// +1 if x is greater than y.
+		if cmp.Compare(a[i], a[i-1]) == cmp.Compare(b[i], b[i-1]) {
+			cnt++
+			ans = max(ans, cnt)
+		} else {
+			cnt = 0
+		}
+	}
+	return ans
 }

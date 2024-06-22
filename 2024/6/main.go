@@ -498,3 +498,29 @@ func temperatureTrend(a []int, b []int) (ans int) {
 	}
 	return ans
 }
+
+// 2024_6_22 字典序最小的美丽字符串（字符串，贪心）
+func smallestBeautifulString(a string, k int) string {
+	limit := 'a' + byte(k) // 进位判断
+	s := []byte(a)
+	n := len(a)
+	i := n - 1
+	s[i]++ // 找字典序最小, 先进一位
+	for i < n {
+		if s[i] == limit { // 需要进位
+			if i == 0 { // 无法进位
+				return ""
+			}
+			s[i] = 'a'
+			i--
+			s[i]++
+		} else if i > 0 && s[i] == s[i-1] || i > 1 && s[i] == s[i-2] { // 判断回文
+			s[i]++ // 如果是回文, 就让 s[i]++
+		} else { // 往右边找有没有回文
+			// 需要注意, 因为题目本身给的字符串是美丽字符串
+			// 而我们要找的是字典序最小, 所以只需要一直往右找是否是回文即可
+			i++
+		}
+	}
+	return string(s)
+}

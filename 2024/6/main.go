@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 // 2024_6_1 给小朋友们分糖果 I
@@ -523,4 +524,15 @@ func smallestBeautifulString(a string, k int) string {
 		}
 	}
 	return string(s)
+}
+
+// 2024_6_23 检测大写字母（字符串，模拟）
+func detectCapitalUse(word string) bool {
+	cnt := 0
+	for _, v := range word {
+		if unicode.IsUpper(v) {
+			cnt++
+		}
+	}
+	return cnt == 0 || cnt == len(word) || cnt == 1 && unicode.IsUpper(rune(word[0]))
 }

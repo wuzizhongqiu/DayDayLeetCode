@@ -536,3 +536,25 @@ func detectCapitalUse(word string) bool {
 	}
 	return cnt == 0 || cnt == len(word) || cnt == 1 && unicode.IsUpper(rune(word[0]))
 }
+
+// 2024_6_24 下一个更大元素 II（单调栈/模拟）
+func nextGreaterElements(nums []int) []int {
+	n := len(nums)
+	ans := make([]int, n)
+	for i := range ans {
+		ans[i] = -1
+	}
+	st := []int{}
+	for i := 0; i < n*2; i++ {
+		// 栈中存在元素 && 当前元素 > 栈中存的前面的元素
+		for len(st) > 0 && nums[i%n] > nums[st[len(st)-1]] {
+			ans[st[len(st)-1]] = nums[i%n]
+			st = st[:len(st)-1]
+		}
+		// 只需要第一圈遍历的元素下标即可
+		if i < n {
+			st = append(st, i%n)
+		}
+	}
+	return ans
+}

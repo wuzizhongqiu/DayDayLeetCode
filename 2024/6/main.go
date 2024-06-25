@@ -558,3 +558,27 @@ func nextGreaterElements(nums []int) []int {
 	}
 	return ans
 }
+
+// 2024_6_25 找到矩阵中的好子集（CV）
+func goodSubsetofBinaryMatrix(grid [][]int) []int {
+	maskToIdx := map[int]int{}
+	for i, row := range grid {
+		mask := 0
+		for j, x := range row {
+			mask |= x << j
+		}
+		if mask == 0 {
+			return []int{i}
+		}
+		maskToIdx[mask] = i
+	}
+
+	for x, i := range maskToIdx {
+		for y, j := range maskToIdx {
+			if x&y == 0 {
+				return []int{min(i, j), max(i, j)}
+			}
+		}
+	}
+	return nil
+}

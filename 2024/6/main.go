@@ -582,3 +582,40 @@ func goodSubsetofBinaryMatrix(grid [][]int) []int {
 	}
 	return nil
 }
+
+// 2024_6_26 特别的排列（记忆化搜索/状压DP）
+func specialPerm(nums []int) (ans int) {
+	n := len(nums)
+	memo := make([][]int, 1<<n)
+	for i := range memo {
+		memo[i] = make([]int, n)
+		for j := range memo[i] {
+			memo[i][j] = -1
+		}
+	}
+	var dfs func(int, int) int
+	// s 的二进制中的 1 代表对应下标的元素是否被选择
+	dfs = func(s, i int) (res int) {
+		// 如果数组的元素都选完了, 排列数+1
+		if s == 1<<n-1 {
+			return 1
+		}
+		p := &memo[s][i]
+		if *p != -1 {
+			return *p
+		}
+		for j, x := range nums {
+			// 没选过这个数 && 符合题目要求（选数的过程）
+			if s>>j&1 == 0 && (nums[i]%x == 0 || x%nums[i] == 0) {
+				res += dfs(s|1<<j, j)
+			}
+		}
+		*p = res
+		return res
+	}
+	for i := range nums {
+		ans += dfs(1<<i, i)
+	}
+	return ans % 1_000_000_007
+}
+

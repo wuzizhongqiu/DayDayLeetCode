@@ -619,3 +619,18 @@ func specialPerm(nums []int) (ans int) {
 	return ans % 1_000_000_007
 }
 
+// 2024_6_27 执行子串操作后的字典序最小字符串（字符串、贪心）
+func smallestString(s string) string {
+	b := []byte(s)
+	for i := range b {
+		for b[i] != 'a' {
+			b[i] = b[i] - 1
+			i++
+			if i == len(b) || b[i] == 'a' {
+				return string(b)
+			}
+		}
+	}
+	b[len(b)-1] = 'z'
+	return string(b)
+}

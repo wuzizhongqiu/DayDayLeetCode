@@ -634,3 +634,8 @@ func smallestString(s string) string {
 	b[len(b)-1] = 'z'
 	return string(b)
 }
+
+// 2024_6_29 移除字符串中的尾随零（库函数）
+func removeTrailingZeros(num string) string {
+	return strings.TrimRight(num, "0")
+}

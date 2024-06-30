@@ -639,3 +639,21 @@ func smallestString(s string) string {
 func removeTrailingZeros(num string) string {
 	return strings.TrimRight(num, "0")
 }
+
+// 2024_6_30
+func findTargetSumWays(nums []int, target int) (ans int) {
+	var dfs func(int, int)
+	dfs = func(start, sum int) {
+		if sum == target && start == len(nums) {
+			ans++
+			return
+		}
+		if start >= len(nums) {
+			return
+		}
+		dfs(start+1, sum+nums[start])
+		dfs(start+1, sum-nums[start])
+	}
+	dfs(0, 0)
+	return ans
+}
